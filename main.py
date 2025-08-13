@@ -11,6 +11,7 @@ def get_ports():
     try:
         port_selection = input("Enter port ranges (EX: 22-23)\n$ ").strip()
 
+        # Enter range of numbers
         if "-" in port_selection:
             start_port, end_port = port_selection.split("-")
             start_port = int(start_port.strip())

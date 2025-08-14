@@ -6,6 +6,7 @@ import pyfiglet
 import socket
 import threading
 
+
 # Prompts user to import range
 def get_ports():
     try:
@@ -32,19 +33,23 @@ def get_ports():
         print(f"Invalid Input: {e}") 
         return 
 
-def main():
-    # Get input for IP, and timeout 
+# Used to create the command line prompt by importing argparse
+def parse_cli_arguments():
+    # Get input for target hose and timeout connection.
     parser = argparse.ArgumentParser(description="Port Scanner")
-
-    # arguments to add in commanmd line to find target host and allow user to set timeout
-    parser.add_argument("--target", "--th", help="Enter IP address you wish to scan.", required=True)
-    # If wish to change timeout default, change your preferred setting to whatever number of your choice or use command line argument to change it.
-    parser.add_argument("--timeout", default=1, help="This is used to set your own timeout. Default is 1s, supports 0.8", type=float, required=False)
     
-    # add arguments to enforce command line prompt
+    # Adds target host and timeout defaults and help menu
+    parser.add_argument("--target", "--th", help="Enter IP address you wish to scan.", required=True)
+    # If wish to change timeout default, change your preferred setting to number of your choice on default or use command line argument to change it.
+    parser.add_argument("--timeout", default=1, help="This is used to set your own timeout. Default is 1s, supports float timeouts.", type=float, required=False)
+
+    # create object for error handling
     args = parser.parse_args()
-    # args.target
-    # args.timeout
+    return args
+
+def main():
+
+    args = parse_cli_arguments()
 
     # Prompt user to import port range:
     start_port, end_port = get_ports()
@@ -56,13 +61,10 @@ def main():
     except socket.gaierror as e:
         print(f"Could not resolve {args.target}: {e}")
 
-    # Creating a TCP connection 
-    # ip_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # print(ip_socket)
-
     for port in range(start_port, end_port + 1):
     # create new tcp socket
         try:
+             # Creating a TCP connection 
             cl_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             # set socket timeout to user input or default
             cl_socket.settimeout(args.timeout)
@@ -77,6 +79,7 @@ def main():
             # Close socket
             cl_socket.close()
 
+        
         except ConnectionRefusedError:
             print(f"Connection refused. Please ensure server is running.")
         except Exception as e:

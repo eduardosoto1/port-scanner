@@ -20,6 +20,7 @@ py main.py --target [TARGET HOST or IP address] --timeout [OPTIONAL TIMEOUT SECO
 ```
 - Target is used to view the destination you are connecting to.
 - Timeout has a default set to 1, use timeout to change it to your preference
+- use [-h] for help menu
 
 Heres an Example of scanning ports 20-25
 ```bash 
